@@ -25,7 +25,7 @@ public class StringSearcher {
     }
 
     private static boolean fullMatch(String text, String pattern, int position) {
-        for (int i=0; i<pattern.length(); i++) {
+        for (int i=pattern.length()-1; i>=0; i--) {
             if (pattern.charAt(i) != text.charAt(i+position)) {
                 return false;
             }
@@ -45,6 +45,7 @@ public class StringSearcher {
         HashMap<String, Integer> badCharTable = makeBadCharTable(pattern, text);
 
         ArrayList<Integer> matches = new ArrayList();
+
         for (int i=0; i<text.length()-pattern.length(); i++) {
             if (fullMatch(text, pattern, i)) {
                 matches.add(i++);
