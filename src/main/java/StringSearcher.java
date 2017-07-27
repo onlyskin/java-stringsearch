@@ -43,14 +43,18 @@ public class StringSearcher {
 
     private static int[] search(String text, String pattern) {
         HashMap<String, Integer> badCharTable = makeBadCharTable(pattern, text);
-
         ArrayList<Integer> matches = new ArrayList();
 
-        for (int i=0; i<text.length()-pattern.length(); i++) {
-            if (fullMatch(text, pattern, i)) {
-                matches.add(i++);
+        int position = 0;
+        while (position<text.length()-pattern.length()) {
+            if (fullMatch(text, pattern, position)) {
+                matches.add(position++);
+            } else {
+                int shift = getBadCharShift(text, pattern, position, badCharTable);
+                position = position + shift;
             }
         }
+
         int[] result = new int[matches.size()];
         for (int i=0; i<matches.size(); i++) {
             result[i] = matches.get(i);
