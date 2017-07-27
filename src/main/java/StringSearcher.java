@@ -17,9 +17,22 @@ public class StringSearcher {
         return badCharTable;
     }
 
+    private static boolean fullMatch(String text, String pattern, int position) {
+        for (int i=0; i<pattern.length(); i++) {
+            if (pattern.charAt(i) != text.charAt(i+position)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private static int[] search(String text, String pattern) {
         ArrayList<Integer> matches = new ArrayList();
-        matches.add(0);
+        for (int i=0; i<text.length()-pattern.length(); i++) {
+            if (fullMatch(text, pattern, i)) {
+                matches.add(i++);
+            }
+        }
         int[] result = new int[matches.size()];
         for (int i=0; i<matches.size(); i++) {
             result[i] = matches.get(i);
