@@ -1,17 +1,24 @@
 import java.util.*;
 
 public class StringSearcher {
-    public HashMap<String, Integer> makeBadCharTable(String pattern) {
+    public static HashMap<String, Integer> makeBadCharTable(String pattern, String text) {
         String[] characters = pattern.split("");
         HashMap<String, Integer> badCharTable = new HashMap<>();
         int wordLength = characters.length;
-        for (int i=0; i < wordLength; i++) {
+        for (int i=0; i<wordLength; i++) {
             String currentChar = characters[i];
             if (!badCharTable.containsKey(currentChar)) {
                 badCharTable.put(currentChar, wordLength);
             }
             if (i != wordLength - 1) {
                 badCharTable.put(currentChar, wordLength - i - 1);
+            }
+        }
+        String[] textCharacters = text.split("");
+        for (int j=0; j<textCharacters.length; j++) {
+            String currentTextChar = textCharacters[j];
+            if (!badCharTable.containsKey(currentTextChar)) {
+                badCharTable.put(currentTextChar, wordLength);
             }
         }
         return badCharTable;
@@ -26,7 +33,17 @@ public class StringSearcher {
         return true;
     }
 
+    protected static int getBadCharShift(String text,
+                                       String pattern,
+                                       int position,
+                                       HashMap<String, Integer> badCharTable) {
+        String key = String.valueOf(text.charAt(position + pattern.length() - 1));
+        return badCharTable.get(key);
+    }
+
     private static int[] search(String text, String pattern) {
+        HashMap<String, Integer> badCharTable = makeBadCharTable(pattern, text);
+
         ArrayList<Integer> matches = new ArrayList();
         for (int i=0; i<text.length()-pattern.length(); i++) {
             if (fullMatch(text, pattern, i)) {
